@@ -12,14 +12,22 @@ all: check libs bins
 #all: check  zeromq  czmq
 all_clean: zlib_clean 
 
-libs:check zlib readline libxml2 openssl openssh nanomsg
-bins:check ethtool 
+libs:check zlib readline libxml2 openssl
+bins:check ipmitool 
 
 
 check:
 	@echo "CC = $(CC) "
 	@echo "PREFIX = $(PREFIX)"
 	@echo "checking..."
+
+ipmitool-1.8.17:
+	tar -xf ipmitool-1.8.17.tar.bz2 -C tmp
+ipmitool:ipmitool-1.8.17
+	cd tmp/$< && \
+	$(export_env_val) && \
+	./configure --prefix=$(PREFIX) --enable-shared=yes --enable-intf-lanplus=yes &&\
+	make clean; make && make install
 
 
 iputils-s20151218:
